@@ -28,8 +28,10 @@ public class RecCrack : MonoBehaviour
     public bool ConStatus = false;
     //接触した瞬間だけを記録したいからこれを使う
     public int n = 0;
-    //Jsonファイルの保存先 Application.dataPathで今開いているUnityプロジェクトのフォルダを指定、後ろは保存名
-    //public string _dataPath = Path.Combine(Application.persistentDataPath, "crackdata.json");
+    //jsonに変換する前の文字列
+    public string jsonstr = "null";
+    // 線の全体の長さ、このスクリプトでの計算とDaraManager.csに渡すための変数
+    public double lineLength = 0d;
 
     // Start is called before the first frame update
     void Start()
@@ -37,6 +39,7 @@ public class RecCrack : MonoBehaviour
         crackInfoObject = new CrackInfoObject();
         crackInfoObject.crackInfos = new List<CrackInfo>();
         Debug.Log("ひび割れ幅を選択してください");
+        jsonstr = "nul";
     }
 
     // Update is called once per frame
@@ -86,18 +89,18 @@ public class RecCrack : MonoBehaviour
             //ここにつまみで設定したヒビの幅を入れる
             double selectWidth = 0.1;
 
-            // 線の全体の長さを計算
-            double lineLength = 0d;
+            lineLength = 0d;
+
             for (int i = 0; i < cPoints.Count - 1; i++)
             {
-                lineLength += Vector3.Distance(new Vector3(cPoints[i].x, cPoints[i].y, cPoints[i].z), new Vector3(cPoints[i + 1].x, cPoints[i + 1].y, cPoints[i + 1].z));
+                lineLength += Vector3.Distance(new Vector3(cPoints[i].x, cPoints[i].y, cPoints[i].z), new Vector3(cPoints[i + 1].x, cPoints[i + 1].y, cPoints[i + 1].z)) * 1000d;//* 1000dで単位をmmにしている
             }
 
             CrackInfo crackInfo = new CrackInfo()
             {
                 // 単位：mm
                 CrackWidth = selectWidth,
-                CrackLength = lineLength * 1000d,
+                CrackLength = lineLength,
                 //crackPoint = cPoints,
             };
 
@@ -137,7 +140,7 @@ public class RecCrack : MonoBehaviour
             string adress = Application.dataPath + "/crackdata.json";
 
             // Json形式にシリアライズ（変換）
-            string jsonstr = JsonUtility.ToJson(crackInfoObject, true);
+            jsonstr = JsonUtility.ToJson(crackInfoObject, true);
             //Debug.Log(jsonstr);
 
             if (!File.Exists(adress))

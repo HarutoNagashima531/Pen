@@ -63,6 +63,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scenes\Nagashima\Script\DataManager.cs" />
     <Compile Include="Assets\Scenes\Nagashima\Script\RecCrack.cs" />
     <Compile Include="Assets\Scenes\Nagashima\Script\Trigger.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01.cs" />
